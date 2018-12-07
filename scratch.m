@@ -147,7 +147,8 @@ for ii = 21:21 %length(peaks)
        title(sprintf('ii = %d',ii));
        grid on;
        
-       plot(time(pfound(1)-1:pfound(end)-1), dy(pfound(1):pfound(end)),'gx-.')
+       plot(time(pfound(1)-1:pfound(end)-1), ...
+           dy(pfound(1):pfound(end)),'gx-.')
        
     end
     
