@@ -99,25 +99,25 @@ grid on;
 
 %% PEAKS
 
-[peaks,locs] = findpeaks(rectified);
+[peaks_val,locs] = findpeaks(rectified);
 
 min_amplitude = 0.3;
 %filter out peaks below a minimum threshold
 remove_index = [];
-for ii = 1:length(peaks)
-   if (peaks(ii) < min_amplitude)
+for ii = 1:length(peaks_val)
+   if (peaks_val(ii) < min_amplitude)
       remove_index = [remove_index ii]; 
        
    end
 end
-peaks(remove_index) = [];
+peaks_val(remove_index) = [];
 locs(remove_index) = [];
 
 
 
 figure, plot(time, vals,'b.-');
 hold on;
-plot(time(locs), peaks,'kd');
+plot(time(locs), peaks_val,'kd');
 
 %% Scan for slopes beside each central peak
 dy = diff(yfilt1);
@@ -126,7 +126,7 @@ dt = diff(time); %fixed sampling, so should not change
 
 
 close all
-for ii = 21:21 %length(peaks)
+for ii = 21:21 %length(peaks_val)
     
     %how many peaks within +-3ms
     ptime = time - time(locs(ii));%ptime index maps to time directly
@@ -141,9 +141,9 @@ for ii = 21:21 %length(peaks)
            yfilt1(pfound(1):pfound(end)),'o-');
        hold on;
        for jj = 1:length(pfound)
-       plot(time(pfound(jj)), peaks(pfound(jj)), 'rd');
+       plot(time(pfound(jj)), peaks_val(pfound(jj)), 'rd');
        end
-       plot(time(locs(ii)), peaks(ii));
+       plot(time(locs(ii)), peaks_val(ii));
        title(sprintf('ii = %d',ii));
        grid on;
        
@@ -217,7 +217,7 @@ for jj = 20:30 %length(locs)
    w = locs(jj)-width:locs(jj) + width;
    figure, plot(time(w),yfilt1(w));
    hold on;
-   plot(time(locs(jj)), peaks(jj),'v'); 
+   plot(time(locs(jj)), peaks_val(jj),'v'); 
    dt = diff(time);
    ddt = diff(dt);
    dy = diff(yfilt1(w));
@@ -238,9 +238,9 @@ end
 
 %% SAVE SPIKE DATA
 
-spike_signal = zeros(length(peaks),width*2+1);
+spike_signal = zeros(length(peaks_val),width*2+1);
 figure; hold on;
-for ii = 4:10 %length(peaks)
+for ii = 4:10 %length(peaks_val)
     spike_signal(ii,:) = locs(ii)-width:locs(ii)+width;
     
     plot(yfilt1(spike_signal(ii,:)));
@@ -257,7 +257,7 @@ risetime(yfilt1,time)
 
 
 %%
-for ii = 4:length(peaks)
+for ii = 4:length(peaks_val)
    pulsewidth(yfilt1(spike_signal(ii,:)),time(spike_signal(ii,:)), ...
        'Polarity', 'Positive'); 
     
